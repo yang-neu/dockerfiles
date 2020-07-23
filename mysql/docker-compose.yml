@@ -1,0 +1,17 @@
+dbserver:
+    build: ./mysql
+    ports:
+     - 3306:3306
+    hostname: dbserver
+    environment:
+        MYSQL_DATABASE: order
+        MYSQL_ROOT_PASSWORD: password
+app:
+    build: ./
+    ports:
+     - 8080:8080
+    links:
+     - dbserver
+    volumes:
+     - $PWD:/usr/src/app
+    tty: true
