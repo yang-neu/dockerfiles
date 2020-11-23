@@ -10,6 +10,7 @@ set -e
 CONTNAME=nginx_container
 IMGNAME=ub18_snap_systemctl_ng
 RELEASE=18.04
+WK_DIR=$(pwd)
 
 SUDO=""
 if [ -z "$(id -Gn|grep docker)" ] && [ "$(id -u)" != "0" ]; then
@@ -26,11 +27,15 @@ fi
 BUILDDIR=$(pwd)/temp
 mkdir $BUILDDIR
 
+if [ ! -d $WK_DIR/html ]; then
+    git clone https://github.com/yang-neu/Periodic-Table.git html
+fi 
+
 usage() {
     echo "usage: $(basename $0) [options]"
     echo
-    echo "  -c|--containername <name> (default: snappy)"
-    echo "  -i|--imagename <name> (default: snapd)"
+    echo "  -c|--containername <name> (default: nginx_container)"
+    echo "  -i|--imagename <name> (default: ub18_snap_systemctl_ng)"
     rm_builddir
 }
 
@@ -118,6 +123,7 @@ $SUDO docker run \
     --security-opt seccomp:unconfined \
     -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
     -v /lib/modules:/lib/modules:ro \
+    -v ${WK_DIR}:/var/vol_www:ro\
     -d $IMGNAME || clean_up
 
 # wait for snapd to start
@@ -140,3 +146,4 @@ echo "container $CONTNAME started ..."
 
 print_info
 rm_builddir
+
