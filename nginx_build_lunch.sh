@@ -99,6 +99,7 @@ RUN apt-get update &&\
  apt-get clean &&\
  dpkg-divert --local --rename --add /sbin/udevadm &&\
  ln -s /bin/true /sbin/udevadm
+ mv /var/www /var/org_www
 RUN systemctl enable snapd
 RUN systemctl enable nginx
 VOLUME ["/sys/fs/cgroup"]
@@ -123,7 +124,7 @@ $SUDO docker run \
     --security-opt seccomp:unconfined \
     -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
     -v /lib/modules:/lib/modules:ro \
-    -v ${WK_DIR}:/var/vol_www:ro\
+    -v ${WK_DIR}:/var/www:ro\
     -d $IMGNAME || clean_up
 
 # wait for snapd to start
