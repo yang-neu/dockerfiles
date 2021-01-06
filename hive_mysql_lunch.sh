@@ -1,1 +1,0 @@
-docker run --restart unless-stopped -p 3306:3306 --name hivemysqlautostart -e MYSQL_ROOT_PASSWORD=hive9assw0rd -e MYSQL_DATABASE=hive_db MYSQL_USER=alex MYSQL_PASSWORD=tsw$606 -v $(pwd):/var/lib/mysql -d mysql:latest 
